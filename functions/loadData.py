@@ -6,6 +6,8 @@ from functions.removeStart import *
 import scipy.signal
 from scipy.interpolate import splev,splrep
 
+##this script has been verified
+
 def loadData(dir, fname, filt, est, rem, ws, resampleSize):
     path = dir+fname
 
@@ -21,19 +23,15 @@ def loadData(dir, fname, filt, est, rem, ws, resampleSize):
         posMat = np.hstack((posMat,M[:,fP:fP+3]))
 
 
-    # #Filtering
-    # if filt==1:
-    #     b = [0.0004, 0.0012, 0.0012, 0.0004]
-    #     a = [1.0000, -2.6862, 2.4197, -0.7302]  #[b,a] = butter(3, 0.05)
-    #     posMat = scipy.signal.lfilter(b,a,posMat)   ###filter need to be verified
-    #     oriMat = scipy.signal.lfilter(b, a, oriMat)
-    # print(posMat.shape)
-    # print(posMat)
-    #
+    #Filtering
+    if filt==1:
+        b, a = scipy.signal.butter(3, 0.05)
+        posMat = scipy.signal.lfilter(b, a, posMat, axis=0) ###verified
+        oriMat = scipy.signal.filtfilt(b, a, oriMat, axis=0)
+
     #Estimation
     if est==1:
         oriMat = estimateOrientationFromPosition( posMat );  ##verified
-    print(oriMat)
 
     #data structure : dictionnary
     data = {'lElbow ori':oriMat[:,20:24].T,
@@ -69,13 +67,13 @@ def loadData(dir, fname, filt, est, rem, ws, resampleSize):
         posMat = posMat[:,deb-1:]
         for item in data:
             data[item]=data[item][:,deb-1:]
-    print(oriMat)
 
     # resampling : verified
     for item in data:
         length = data[item].shape[1]
         new_x = np.linspace(1, length, resampleSize)  #linspace not accurate
         data[item] = np.array([splev(new_x, splrep(range(1, length+1), line, k=3)) for line in data[item]])
+
 
     length = oriMat.shape[1]
     new_x = np.linspace(1, length, resampleSize)

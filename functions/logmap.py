@@ -1,4 +1,3 @@
-import math
 import numpy as np
 from functions.basic_functions import QuatMatrix
 from functions.basic_functions import acoslog
