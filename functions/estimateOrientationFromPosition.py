@@ -30,7 +30,7 @@ def estimateOrientationFromPosition(posMat):
                     ])
     dirs = np.zeros(posMat.shape)
     print(dirs.shape)
-    dirs[:,0:3]=np.zeros(posMat.shape[0],3)         #bSpine
+    dirs[:,0:3]=np.zeros((posMat.shape[0],3))         #bSpine
     dirs[:,3:6]=posMat[:,3:6]-posMat[:,0:3]         #bSpine
     dirs[:, 6:9] = posMat[:, 6:9] - posMat[:, 60:63]#bSpine
     dirs[:, 9:12] = posMat[:, 9:12] - posMat[:, 6:9] #Head
@@ -61,7 +61,7 @@ def estimateOrientationFromPosition(posMat):
         for b in range(25):
             fO=b*4
             fP=b*3
-            oriVec[0,fO:fO+4] = compute_q_from_dirbase(dirs[t-1,fP:fP+3],bases[b-1,:])
+            oriVec[fO:fO+4] = compute_q_from_dirbase(dirs[t,fP:fP+3],bases[b,:])
         if t==0:
             oriVec = np.array([oriVec])
             oriMat = oriVec.T

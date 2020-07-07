@@ -20,19 +20,20 @@ def loadData(dir, fname, filt, est, rem, ws, resampleSize):
         fP = j*7
         posMat = np.hstack((posMat,M[:,fP:fP+3]))
 
-    #Filtering
-    if filt==1:
-        b = [0.0004, 0.0012, 0.0012, 0.0004]
-        a = [1.0000, -2.6862, 2.4197, -0.7302]  #[b,a] = butter(3, 0.05)
-        posMat = scipy.signal.lfilter(b,a,posMat)   ###filter need to be verified
-        oriMat = scipy.signal.lfilter(b, a, oriMat)
-    print(posMat.shape)
-    print(posMat)
 
+    # #Filtering
+    # if filt==1:
+    #     b = [0.0004, 0.0012, 0.0012, 0.0004]
+    #     a = [1.0000, -2.6862, 2.4197, -0.7302]  #[b,a] = butter(3, 0.05)
+    #     posMat = scipy.signal.lfilter(b,a,posMat)   ###filter need to be verified
+    #     oriMat = scipy.signal.lfilter(b, a, oriMat)
+    # print(posMat.shape)
+    # print(posMat)
+    #
     #Estimation
     if est==1:
-        oriMat = estimateOrientationFromPosition( posMat );
-
+        oriMat = estimateOrientationFromPosition( posMat );  ##verified
+    print(oriMat)
 
     #data structure : dictionnary
     data = {'lElbow ori':oriMat[:,20:24].T,
@@ -54,7 +55,7 @@ def loadData(dir, fname, filt, est, rem, ws, resampleSize):
     oriMat=oriMat.T
     posMat=posMat.T
 
-    # removing start
+    # removing start : verified
     if rem==1:
         _in = data['lElbow ori']
         _in = np.vstack((_in,data['lWrist ori']))
@@ -68,21 +69,20 @@ def loadData(dir, fname, filt, est, rem, ws, resampleSize):
         posMat = posMat[:,deb-1:]
         for item in data:
             data[item]=data[item][:,deb-1:]
+    print(oriMat)
 
-    # resampling
+    # resampling : verified
     for item in data:
         length = data[item].shape[1]
-        new_x = np.linspace(0,length,resampleSize)
-        data[item] = np.array([splev(new_x, splrep(range(length), line, k=3)) for line in data[item]])
+        new_x = np.linspace(1, length, resampleSize)  #linspace not accurate
+        data[item] = np.array([splev(new_x, splrep(range(1, length+1), line, k=3)) for line in data[item]])
 
     length = oriMat.shape[1]
-    new_x = np.linspace(0,length,resampleSize)
-    oriMat = np.array([splev(new_x, splrep(range(length), line, k=3)) for line in oriMat])
+    new_x = np.linspace(1, length, resampleSize)
+    oriMat = np.array([splev(new_x, splrep(range(1, length+1), line, k=3)) for line in oriMat])
 
     length = posMat.shape[1]
-    new_x = np.linspace(0, length, resampleSize)
-    posMat = np.array([splev(new_x, splrep(range(length), line, k=3)) for line in posMat])
-
-
+    new_x = np.linspace(1, length, resampleSize)
+    posMat = np.array([splev(new_x, splrep(range(1, length+1), line, k=3)) for line in posMat])
 
     return oriMat, posMat, data
