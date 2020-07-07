@@ -11,7 +11,8 @@ from threading import Thread
 from functions.loadData import *
 from Model import Model
 from functions.basic_functions import *
-from functions.estimateOrientationFromPosition import compute_q_from_dirbase
+from functions.processTrainingData import *
+from functions.peakdet import *
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -38,7 +39,7 @@ fastDP = 1;  # fast temporal alignment (using windows instead of full sequence) 
 
 x1 = np.array([1, 2, 3, 4])
 x2 = np.array([6, 3, 1, 8])
-x6=np.array([[1],[2],[3],[4]])
+x6=np.array([[7],[9],[3],[4]])
 x5 = np.array([5,np.nan,4,2])
 x3=np.vstack((x1,x2))
 x10=np.vstack((x3,x3))
@@ -47,7 +48,7 @@ iden = np.identity(4)
 b = np.array([math.sqrt(b) for b in x1])
 x1=np.array([x1])
 fname = 'SkeletonSequence1.txt'
-
+x12 = np.array([3,7])
 a = np.array([4,-2,1])
 bt = np.array([1,-1,3])
 c = compute_q_from_dirbase(a,bt)
@@ -57,11 +58,13 @@ x4=np.array([[math.sqrt(b)+math.sqrt(b**2) for b in x6[0, :]],[b for b in x6[0, 
 x9=np.array([math.sqrt(b)+math.sqrt(b**2) for b in x6[0, :]])
 
 test=np.array([[0 if np.isnan(b) else b for b in a] for a in x3])
+
+x13 = np.vstack((x12,[4, 5]))
 # print(b)
 # print(c)
 # print(test)
 
-# print(x10)
+print(np.nan>3)
 # print(np.dot(iden,x6))
 # print(np.linalg.norm(x6))
 # print(np.zeros(3))
@@ -77,4 +80,16 @@ test=np.array([[0 if np.isnan(b) else b for b in a] for a in x3])
 # yy = np.array(splev(xx, splrep(xt, yt, k=3)))
 # print(yy)
 
-loadData(trainName,fname,filt, est, rem, ws, nbData)
+def test(a,b,*c):
+    res = a+b
+    if c:
+        for t in c:
+            res += t
+    return res
+print(test(2,4))
+print(test(2,4,5))
+print(test(2,4,3,4,5))
+print(x3[:,3])
+
+#processTrainingData(Model,trainName,nspp,registration,fastDP,filt,est,rem,ws,nbData);
+#loadData(trainName,fname,filt, est, rem, ws, nbData)
