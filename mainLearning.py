@@ -38,6 +38,15 @@ ws = 21;  # windows size for segmentation
 fastDP = 1;  # fast temporal alignment (using windows instead of full sequence) or not
 
 x1 = np.array([1, 2, 3, 4])
+x2 = np.array([[1, 2, 3, 4]])
+
+print(x1.T)
+print(x2.T)
+
+
+
+
+
 x2 = np.array([6, 3, 1, 8])
 x6=np.array([[7],[9],[3],[4]])
 x5 = np.array([5,np.nan,4,2])
@@ -64,7 +73,7 @@ x13 = np.vstack((x12,[4, 5]))
 # print(c)
 # print(test)
 
-print(np.nan>3)
+# print(np.nan>3)
 # print(np.dot(iden,x6))
 # print(np.linalg.norm(x6))
 # print(np.zeros(3))
@@ -80,16 +89,21 @@ print(np.nan>3)
 # yy = np.array(splev(xx, splrep(xt, yt, k=3)))
 # print(yy)
 
-def test(a,b,*c):
-    res = a+b
-    if c:
-        for t in c:
-            res += t
-    return res
-print(test(2,4))
-print(test(2,4,5))
-print(test(2,4,3,4,5))
-print(x3[:,3])
 
-#processTrainingData(Model,trainName,nspp,registration,fastDP,filt,est,rem,ws,nbData);
+# print(test(2,4))
+# print(test(2,4,5))
+# print(test(2,4,3,4,5))
+x = np.arange(1, 300 + 1).reshape([300, 1])
+
+mxpos = np.nan
+mx=np.inf
+mxpos=x[3]
+mx=x[4]
+maxtab = np.array([mxpos[0], mx[0]])
+print(maxtab)
+mxpos=x[5]
+mx=x[6]
+maxtab = np.vstack((maxtab,[mxpos[0], mx[0]]))
+print(maxtab)
+processTrainingData(Model,trainName,nspp,registration,fastDP,filt,est,rem,ws,nbData);
 #loadData(trainName,fname,filt, est, rem, ws, nbData)
