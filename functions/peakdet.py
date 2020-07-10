@@ -9,14 +9,11 @@ def peakdet(v, delta, *x):
     print(maxtab.size)
 
     v = v.T  ##v was a horizontal vector
-    print(v)
     if x:
-        print(x[0])
         x = x[0].T
         if v.shape[0] != x.shape[0]:
             pass  # error
     else:
-        print(v.shape[0])
         x = np.arange(1, v.shape[0] + 1).reshape([v.shape[0], 1])
 
     ##delta must be a positive scalar
@@ -38,22 +35,22 @@ def peakdet(v, delta, *x):
 
         if lookformax!=0:
             if this < mx-delta:
-                if maxtab.size!=0:
-                    maxtab = np.vstack((maxtab,[mxpos, mx]))
+                if maxtab.size != 0:
+                    maxtab = np.vstack((maxtab,[mxpos[0], mx[0]]))
                 else:
-                    maxtab = np.array([mxpos, mx])
+                    maxtab = np.hstack((mxpos,mx))
                 mn = this
                 mnpos = x[i]
                 lookformax = 0
         else:
             if this > mn+delta:
                 if mintab.size != 0:
-                    mintab = np.vstack((mintab, [mnpos, mn]))
+                    mintab = np.vstack((mintab, [mnpos[0], mn[0]]))
                 else:
-                    mintab = np.array([mnpos, mn])
-                    mx = this
-                    mxpos = x[i]
-                    lookformax = 1
+                    mintab = np.hstack((mnpos, mn))
+                mx = this
+                mxpos = x[i]
+                lookformax = 1
     return maxtab, mintab
 
 

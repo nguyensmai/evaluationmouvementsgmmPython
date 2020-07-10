@@ -10,7 +10,7 @@ def segmentSequenceKeyPose( _in, ws, thres ):
         for w in np.arange(-math.floor(ws / 2), math.floor(ws / 2) + 1):
             for d in range(int(_in.shape[0] / 4)):
                 muMan = _in[d * 4: d * 4 + 4, t - 1:t]
-                sigma = sigma + np.linalg.norm(logmap(_in[d * 4:d * 4 + 4, t + w - 1:t + w], muMan))
+                sigma = sigma + np.linalg.norm(logmap(_in[d * 4:d * 4 + 4, t + w - 1:t + w], muMan))**2
 
         sigma = sigma / ws
         variation[0][t - 1] = sigma
@@ -29,11 +29,10 @@ def segmentSequence( _in, ws, thres ):  ##return 1-d vecteur and matrix
         for w in np.arange(-math.floor(ws/2),math.floor(ws/2)+1):
             for d in range(int(_in.shape[0]/4)):
                 muMan = _in[d*4: d*4+4, t-1:t]
-                sigma = sigma + np.linalg.norm(logmap(_in[d*4:d*4+4, t+w-1:t+w],muMan))
+                sigma = sigma + np.linalg.norm(logmap(_in[d*4:d*4+4, t+w-1:t+w],muMan))**2
 
         sigma = sigma/ws
         variation[0][t-1] = sigma
-    print(variation)
     mintab = peakdet(variation, thres)[1]
     if mintab.shape[1]>0:
         cuts = mintab[:,0] ##a verifier

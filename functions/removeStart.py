@@ -8,13 +8,17 @@ def removeStart(_in, ws, thres, dec):
         for w in np.arange(-math.floor(ws/2),math.floor(ws/2)+1):
             for d in range(int(_in.shape[0]/4)):
                 muMan = _in[d*4: d*4+4, t-1:t]
-                sigma = sigma + np.linalg.norm(logmap(_in[d*4:d*4+4, t+w-1:t+w],muMan))
+                res = np.linalg.norm(logmap(_in[d*4:d*4+4, t+w-1:t+w],muMan))
+                sigma = sigma + np.linalg.norm(logmap(_in[d*4:d*4+4, t+w-1:t+w],muMan))**2
 
         sigma = sigma/ws
         if sigma>thres:
             deb = max(1,t-dec)
             out = _in[:,deb-1:]
+            print(t)
+            print(sigma)
             return out, deb
     deb = 1
     out = _in
+    print("flag")
     return out, deb

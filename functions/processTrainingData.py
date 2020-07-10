@@ -19,5 +19,7 @@ def processTrainingData(model, trainName, nspp,registration,fastDP,filt,est,rem,
         out = np.vstack((out, dataTrain['rElbow ori']))
         out = np.vstack((out, dataTrain['rWrist ori']))
         out = np.vstack((out, dataTrain['rShoulder ori']))
-        segmentSequence(out, ws, 0.02)
+
+        cuts, variation = segmentSequence(out, ws, 0.05)
+        print(dataTrain)
 
