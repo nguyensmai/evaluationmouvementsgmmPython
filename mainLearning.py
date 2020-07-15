@@ -19,91 +19,37 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
 ## Parameters
-nbData = 300;  # Number of datapoints
-nbSamples = 2;  # Number of demonstrations
-trainName = 'data/Assis3Maxime/';  # folders names from where to load data
-nspp = 2;  # number of skeleton sequence per folder
-Model.nbVar = 46;  # Dimension of the tangent space (incl. time)
-Model.nbVarMan = 55;  # Dimension of the manifold (incl. time)
-nbIter = 10;  # Number of iteration for the Gauss Newton algorithm
-nbIterEM = 10;  # Number of iteration for the EM algorithm
-Model.nbStates = 15;  # Number of states in the GMM
-Model.dt = 0.01;  # Time step duration
-Model.params_diagRegFact = 1E-4;  # Regularization of covariance
-registration = 1;  # temporal alignment or not
-filt = 1;  # filtering of data or not
-est = 1;  # estimation of orientation from position or kinect quaternions
-rem = 1;  # removal of begining of the sequence (no motion) or not
-ws = 21;  # windows size for segmentation
-fastDP = 1;  # fast temporal alignment (using windows instead of full sequence) or not
-
-x1 = np.array([1, 2, 3, 4])
-x2 = np.array([[1, 2, 3, 4]])
-
-print(x1.T)
-print(x2.T)
-
-
+nbData = 300  # Number of datapoints
+nbSamples = 2  # Number of demonstrations
+trainName = 'data/Assis3Maxime/'  # folders names from where to load data
+nspp = 2  # number of skeleton sequence per folder
+nbVar = 46  # Dimension of the tangent space (incl. time)
+nbVarMan = 55  # Dimension of the manifold (incl. time)
+nbIter = 10  # Number of iteration for the Gauss Newton algorithm
+nbIterEM = 10  # Number of iteration for the EM algorithm
+nbStates = 15  # Number of states in the GMM
+dt = 0.01  # Time step duration
+params_diagRegFact = 1E-4  # Regularization of covariance
+registration = 1  # temporal alignment or not
+filt = 1  # filtering of data or not
+est = 1  # estimation of orientation from position or kinect quaternions
+rem = 1  # removal of begining of the sequence (no motion) or not
+ws = 21  # windows size for segmentation
+fastDP = 1  # fast temporal alignment (using windows instead of full sequence) or not
+model = Model(nbVar, nbVarMan, nbStates, dt, params_diagRegFact)
+#
+# x1 = np.array([1, 2, 3, 4])
+#
+# x2 = np.array([6, 3, 0, 8])
+# x3=np.vstack((x1,x2))
 
 
+model, xIn, uIn, xOut, uOut = processTrainingData(model,trainName,nspp,registration,fastDP,filt,est,rem,ws,nbData)
+u = uIn
+x = xIn
+for i in range(1,16):
+    u = np.vstack((u, uOut[i]))
+    x = np.vstack((x, xOut[i]))
+model.x = x
 
-x2 = np.array([6, 3, 1, 8])
-x6=np.array([[7],[9],[3],[4]])
-x5 = np.array([5,np.nan,4,2])
-x3=np.vstack((x1,x2))
-x10=np.vstack((x3,x3))
-x7=x3[:,1:4]
-iden = np.identity(4)
-b = np.array([math.sqrt(b) for b in x1])
-x1=np.array([x1])
-fname = 'SkeletonSequence1.txt'
-x12 = np.array([3,7])
-a = np.array([4,-2,1])
-bt = np.array([1,-1,3])
-c = compute_q_from_dirbase(a,bt)
-x11 = np.array([[5,5],[5,5]])
-x10[1:3,1:3] = x11
-x4=np.array([[math.sqrt(b)+math.sqrt(b**2) for b in x6[0, :]],[b for b in x6[0, :]]])
-x9=np.array([math.sqrt(b)+math.sqrt(b**2) for b in x6[0, :]])
-
-test=np.array([[0 if np.isnan(b) else b for b in a] for a in x3])
-
-x13 = np.vstack((x12,[4, 5]))
-# print(b)
-# print(c)
-# print(test)
-
-# print(np.nan>3)
-# print(np.dot(iden,x6))
-# print(np.linalg.norm(x6))
-# print(np.zeros(3))
-# print(x3.shape)
-# print(QuatMatrix(x6,axis=1))
-# print(np.float64(1.0)/0.0)
-# xt = np.linspace(0,10,21)
-# yt=[np.sin(a) for a in xt]
-# xx = np.linspace(0,10,41)
-# print(xt)
-# print(xx)
-# print(yt)
-# yy = np.array(splev(xx, splrep(xt, yt, k=3)))
-# print(yy)
-
-
-# print(test(2,4))
-# print(test(2,4,5))
-# print(test(2,4,3,4,5))
-x = np.arange(1, 300 + 1).reshape([300, 1])
-
-mxpos = np.nan
-mx=np.inf
-mxpos=x[3]
-mx=x[4]
-maxtab = np.array([mxpos[0], mx[0]])
-print(maxtab)
-mxpos=x[5]
-mx=x[6]
-maxtab = np.vstack((maxtab,[mxpos[0], mx[0]]))
-print(maxtab)
-processTrainingData(Model,trainName,nspp,registration,fastDP,filt,est,rem,ws,nbData);
-#loadData(trainName,fname,filt, est, rem, ws, nbData)
+# loadData(trainName,fname,filt, est, rem, ws, nbData)
