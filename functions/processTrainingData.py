@@ -1,9 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+from functions.basic_functions import logmap
 from functions.loadData import *
 from functions.segmentSequence import *
 from functions.temporalAlignment import *
+
 
 def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est, rem, ws, nbData):
     uIn = np.array([])
@@ -13,8 +15,8 @@ def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est,
     for i in range(1, 16):  # this dictionary starts with 1 and ends with 15
         uOut[i] = np.array([])
 
-    for i in range(1,nspp+1):
-        fname = 'SkeletonSequence'+str(i)+'.txt'
+    for i in range(1, nspp + 1):
+        fname = 'SkeletonSequence' + str(i) + '.txt'
         dataTrain = loadData(trainName, fname, filt, est, rem, ws, nbData)[2]
         out = dataTrain['lElbow ori']
         out = np.vstack((out, dataTrain['lWrist ori']))
@@ -24,9 +26,6 @@ def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est,
         out = np.vstack((out, dataTrain['rShoulder ori']))
 
         cuts, variation = segmentSequence(out, ws, 0.05)
-        v = np.array([variation[0][int(a) - 1] for a in cuts[0]])
-        indices = np.argwhere(v < 0.1).flatten()
-        v = np.delete(v, indices)
         cutsKP = segmentSequenceKeyPose(out, ws, 0.02)[0]
         if uIn.size == 0:
             model.cuts = cuts
@@ -34,24 +33,21 @@ def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est,
         if registration == 1:
             if uIn.size == 0:
                 uRef = dataTrain
-            else :
-                dataTrain = temporalAlignment(uRef, dataTrain,fastDP)
-        uIn = np.hstack((uIn,np.array(range(1,nbData+1))*model.dt))
-        i=1
+            else:
+                dataTrain = temporalAlignment(uRef, dataTrain, fastDP)
+        uIn = np.hstack((uIn, np.array(range(1, nbData + 1)) * model.dt))
+        i = 1
         for d in dataTrain:
-            if uOut[i].size==0:
+            if uOut[i].size == 0:
                 uOut[i] = dataTrain[d]
             else:
-                uOut[i] = np.hstack((uOut[i],dataTrain[d]))
+                uOut[i] = np.hstack((uOut[i], dataTrain[d]))
             i += 1
     xIn = uIn
-    std = np.array([[0],[1],[0],[0]])
+    std = np.array([[0], [1], [0], [0]])
     for i in range(1, 16):
         xOut[i] = uOut[i]
         if i < 10:
-            uOut[i] = np.array([logmap(uOut[i][:,t:t+1], std) for t in range(nbData*nspp)]).T[0]
+            uOut[i] = np.array([logmap(uOut[i][:, t:t + 1], std) for t in range(nbData * nspp)]).T[0]
         i += 1
     return model, xIn, uIn, xOut, uOut
-
-
-

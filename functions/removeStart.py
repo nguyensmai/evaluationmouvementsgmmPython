@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from functions.logmap import logmap
+from functions.basic_functions import logmap
 
 def removeStart(_in, ws, thres, dec):
     for t in range(math.ceil(ws / 2), _in.shape[1] - math.floor(ws / 2) + 1):
