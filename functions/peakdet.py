@@ -3,10 +3,8 @@ import numpy as np
 
 
 def peakdet(v, delta, *x):
-    #
     maxtab = np.array([])
     mintab = np.array([])
-    print(maxtab.size)
 
     v = v.T  ##v was a horizontal vector
     if x:

@@ -4,6 +4,9 @@ from functions.basic_functions import acoslog
 
 
 def logmap(x, mu):
+    """
+    :return: a vertical vertor
+    """
     A = np.array([[1],[0],[0],[0]])
     if np.linalg.norm(mu - A) < 1e-6:
         Q = np.identity(4)

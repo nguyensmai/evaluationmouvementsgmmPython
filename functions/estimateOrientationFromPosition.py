@@ -29,7 +29,6 @@ def estimateOrientationFromPosition(posMat):
                    [0, 1, 0]    #rThumb
                     ])
     dirs = np.zeros(posMat.shape)
-    print(dirs.shape)
     dirs[:,0:3]=np.zeros((posMat.shape[0],3))         #bSpine
     dirs[:,3:6]=posMat[:,3:6]-posMat[:,0:3]         #bSpine
     dirs[:, 6:9] = posMat[:, 6:9] - posMat[:, 60:63]#bSpine

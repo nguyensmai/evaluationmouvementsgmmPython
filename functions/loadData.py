@@ -31,7 +31,7 @@ def loadData(dir, fname, filt, est, rem, ws, resampleSize):
 
     #Estimation
     if est==1:
-        oriMat = estimateOrientationFromPosition( posMat );  ##verified
+        oriMat = estimateOrientationFromPosition( posMat )  ##verified
 
     #data structure : dictionnary
     data = {'lElbow ori':oriMat[:,20:24].T,

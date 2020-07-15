@@ -15,10 +15,7 @@ def removeStart(_in, ws, thres, dec):
         if sigma>thres:
             deb = max(1,t-dec)
             out = _in[:,deb-1:]
-            print(t)
-            print(sigma)
             return out, deb
     deb = 1
     out = _in
-    print("flag")
     return out, deb
