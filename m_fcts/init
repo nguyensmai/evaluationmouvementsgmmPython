@@ -1,0 +1,21 @@
+import numpy as np
+
+
+def init_GMM_kbins(Data, model, nbSamples):
+    """
+    Initialization of Gaussian Mixture Model (GMM) parameters by clustering
+    an ordered dataset into equal bins.
+    """
+    nbData = Data.shape[1] / nbSamples
+    if model.params_diagRegFact == None:
+        model.params_diagRegFact = 1e-4 #Optional regularization term to avoid numerical instability
+
+    # Delimit the cluster bins for the first demonstration
+    tSep = np.round(np.linspace(0, nbData, model.nbStates + 1))  ##round function is not well defined in python
+
+    # Compute statistics for each bin
+    for i in range(model.nbStates):
+        id = np.array([])
+        for n in range(nbSamples):
+            id = np.hstack((id, n*nbData + tSep[i] + np.array(range(1, tSep[i+1]+1))))
+
