@@ -10,13 +10,11 @@ from logging.handlers import RotatingFileHandler
 from threading import Thread
 from functions.loadData import *
 from Model import Model
-from functions.basic_functions import *
 from functions.processTrainingData import *
-from functions.peakdet import *
+from functions.learnGMMmodel import learnGMMmodel
 
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
+
 
 ## Parameters
 nbData = 300  # Number of datapoints
@@ -38,11 +36,10 @@ ws = 21  # windows size for segmentation
 fastDP = 1  # fast temporal alignment (using windows instead of full sequence) or not
 model = Model(nbVar, nbVarMan, nbStates, dt, params_diagRegFact)
 #
-# x1 = np.array([1, 2, 3, 4])
+# x1 = np.array([0, 20, 3, 4])
 #
 # x2 = np.array([6, 3, 0, 8])
 # x3=np.vstack((x1,x2))
-
 
 model, xIn, uIn, xOut, uOut = processTrainingData(model,trainName,nspp,registration,fastDP,filt,est,rem,ws,nbData)
 u = uIn
@@ -52,4 +49,4 @@ for i in range(1,16):
     x = np.vstack((x, xOut[i]))
 model.x = x
 
-# loadData(trainName,fname,filt, est, rem, ws, nbData)
+learnGMMmodel(model,u,xIn,xOut,nbSamples,nbIterEM,nbIter,nbData)
