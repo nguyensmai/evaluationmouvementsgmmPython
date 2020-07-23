@@ -1,5 +1,5 @@
 import numpy as np
-from functions.basic_functions import logmap
+from functions.mapping import logmap
 from functions.dp import *
 
 

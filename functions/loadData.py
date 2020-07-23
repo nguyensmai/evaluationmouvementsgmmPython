@@ -71,7 +71,7 @@ def loadData(dir, fname, filt, est, rem, ws, resampleSize):
     # resampling : verified
     for item in data:
         length = data[item].shape[1]
-        new_x = np.linspace(1, length, resampleSize)  #linspace not accurate
+        new_x = np.linspace(1, length, resampleSize)
         data[item] = np.array([splev(new_x, splrep(range(1, length+1), line, k=3)) for line in data[item]])
 
 
