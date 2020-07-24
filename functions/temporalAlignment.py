@@ -40,7 +40,7 @@ def temporalAlignment(trainD, testD, fast):
             r[t] = q[ind[0]]
     # out
     r = r.astype(int)
-    out = {}
+    out = {}    ## TODO : maybe we can avoid making another dictionary
     for key in testD:
         out[key] = testD[key][:, r]
     return out
