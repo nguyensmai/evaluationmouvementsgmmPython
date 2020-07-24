@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 import os
 import json
-import socket
-import json
-import time
 from collections import OrderedDict
 import logging
 from logging.handlers import RotatingFileHandler

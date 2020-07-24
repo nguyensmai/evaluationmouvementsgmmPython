@@ -1,20 +1,10 @@
 #!/usr/bin/env python
-import os
-import json
-import socket
-import json
-import time
-from collections import OrderedDict
-import logging
-from logging.handlers import RotatingFileHandler
 from threading import Thread
-from functions.loadData import *
 from Model import Model
 from functions.processTrainingData import *
 from functions.learnGMMmodel import learnGMMmodel
-
+import pickle
 import numpy as np
-
 
 ## Parameters
 nbData = 300  # Number of datapoints
@@ -34,19 +24,41 @@ est = 1  # estimation of orientation from position or kinect quaternions
 rem = 1  # removal of begining of the sequence (no motion) or not
 ws = 21  # windows size for segmentation
 fastDP = 1  # fast temporal alignment (using windows instead of full sequence) or not
-model = Model(nbVar, nbVarMan, nbStates, dt, params_diagRegFact)
-#
-# x1 = np.array([0, 20, 3, 4])
-#
-# x2 = np.array([6, 3, 0, 8])
-# x3=np.vstack((x1,x2))
 
-model, xIn, uIn, xOut, uOut = processTrainingData(model,trainName,nspp,registration,fastDP,filt,est,rem,ws,nbData)
-u = uIn
-x = xIn
-for i in range(1,16):
-    u = np.vstack((u, uOut[i]))
-    x = np.vstack((x, xOut[i]))
-model.x = x
+x1 = np.array([0, -0.5, 3, 4])
 
-learnGMMmodel(model,u,xIn,xOut,nbSamples,nbIterEM,nbIter,nbData)
+x2 = np.array([6, 3, 0, 8])
+x3 = np.array([9, 8, 4, 0])
+m1 = np.array([[1,2],[3,5]])
+m2 = np.array([[0,0],[0,0]])
+
+print(np.sum(m1,axis=0))
+
+print(np.sum(m1))
+# #print(np.dot(te,np.linalg.inv(m2)))
+
+
+# model = Model(nbVar, nbVarMan, nbStates, dt, params_diagRegFact)
+# xIn, uIn, xOut, uOut = processTrainingData(model,trainName,nspp,registration,fastDP,filt,est,rem,ws,nbData)
+# u = uIn
+# x = xIn
+# for i in range(1,16):
+#     u = np.vstack((u, uOut[i]))
+#     x = np.vstack((x, xOut[i]))
+# model.x = x
+
+
+f = open('model1.txt', 'rb')
+model = pickle.load(f)
+u = pickle.load(f)
+xIn = pickle.load(f)
+xOut = pickle.load(f)
+f.close()
+
+
+model = learnGMMmodel(model,u,xIn,xOut,nbSamples,nbIterEM,nbIter,nbData)
+
+
+# article = open('model.txt', 'wb')
+# pickle.dump(model, article)
+# article.close()
