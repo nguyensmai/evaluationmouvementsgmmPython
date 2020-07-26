@@ -25,14 +25,6 @@ rem = 1  # removal of begining of the sequence (no motion) or not
 ws = 21  # windows size for segmentation
 fastDP = 1  # fast temporal alignment (using windows instead of full sequence) or not
 
-# x1 = np.array([0, -0.5, 3, 4])
-#
-# x2 = np.array([6, 3, 0, 8])
-# x3 = np.array([9, 8, 4, 0])
-# m1 = np.array([[6,9,-10, -1],[5,9,5,-5],[-8,7,-4,4],[-1,-9,0,6]])
-# m2 = np.array([[1,2,3],[3,1,2],[2,3,1]])
-
-
 model = Model(nbVar, nbVarMan, nbStates, dt, params_diagRegFact)
 xIn, uIn, xOut, uOut = processTrainingData(model,trainName,nspp,registration,fastDP,filt,est,rem,ws,nbData)
 u = uIn
@@ -41,18 +33,7 @@ for i in range(1,16):
     u = np.vstack((u, uOut[i]))
     x = np.vstack((x, xOut[i]))
 model.x = x
-
-
-# f = open('model1.txt', 'rb')
-# model = pickle.load(f)
-# u = pickle.load(f)
-# xIn = pickle.load(f)
-# xOut = pickle.load(f)
-# f.close()
-
-
-model = learnGMMmodel(model,u,xIn,xOut,nbSamples,nbIterEM,nbIter,nbData)
-
+model = learnGMMmodel(model,u,xIn,xOut,nbSamples,nbIterEM,nbIter,nbData)  ## execution time : 3s
 
 article = open('model.txt', 'wb')
 pickle.dump(model, article)
