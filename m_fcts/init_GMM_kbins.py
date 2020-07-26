@@ -25,10 +25,7 @@ def init_GMM_kbins(Data, model, nbSamples):
         for n in range(nbSamples):
             id = np.hstack((id, n * nbData + np.array(range(tSep[i], tSep[i + 1])))).astype(int)
         model.Priors[i] = id.size
-        aee = np.mean(Data[:, id], axis=1, keepdims=True)
         model.Mu[:, i:i + 1] = np.mean(Data[:, id], axis=1, keepdims=True)
-        er = Data[:, id]
-        ae = np.cov(Data[:, id]) + np.identity(Data.shape[0]) * model.params_diagRegFact
-
         model.Sigma[:, :, i] = np.cov(Data[:, id]) + np.identity(Data.shape[0]) * model.params_diagRegFact
     model.Priors = model.Priors / np.sum(model.Priors)
+
