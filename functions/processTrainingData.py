@@ -16,7 +16,7 @@ def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est,
     for i in range(1, 16):  # this dictionary starts with 1 and ends with 15
         uOut[i] = np.array([])
 
-    for i in range(1, nspp + 1):
+    for i in range(1, nspp+1):
         fname = 'SkeletonSequence' + str(i) + '.txt'
         dataTrain = loadData(trainName, fname, filt, est, rem, ws, nbData)[2]  ##1.5 second
         out = dataTrain['lElbow ori']
@@ -25,9 +25,8 @@ def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est,
         out = np.vstack((out, dataTrain['rElbow ori']))
         out = np.vstack((out, dataTrain['rWrist ori']))
         out = np.vstack((out, dataTrain['rShoulder ori']))
-
-        cuts, variation = segmentSequence(out, ws, 0.05)  # 3 to 4 seconds to execute
-        cutsKP = segmentSequenceKeyPose(out, ws, 0.02)[0]  # 3 to 4 seconds to execute
+        cuts, variation = segmentSequence(out, ws, 0.05)  # optimized: 0.2s
+        cutsKP = segmentSequenceKeyPose(out, ws, 0.02)[0]  # optimized: 0.2s
         if uIn.size == 0:
             model.cuts = cuts
             model.cutsKP = cutsKP
@@ -35,7 +34,7 @@ def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est,
             if uIn.size == 0:
                 uRef = dataTrain
             else:
-                dataTrain = temporalAlignment(uRef, dataTrain, fastDP)   ## takes more than 20 seconds to execute
+                dataTrain = temporalAlignment(uRef, dataTrain, fastDP)   ## optimisized :1s
         uIn = np.hstack((uIn, np.array(range(1, nbData + 1)) * model.dt))
         i = 1
         for d in dataTrain:
