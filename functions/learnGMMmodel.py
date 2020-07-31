@@ -27,7 +27,7 @@ def learnGMMmodel(model, u, xIn, xOut, nbSamples, nbIterEM, nbIter, nbData):
     uTmp = np.zeros((model.nbVar, nbData * nbSamples, model.nbStates))
     avg_loglik = np.zeros(nbIterEM)
     Data_gaussPDF = np.zeros((model.nbVar, xIn.size))  ## or xIn.shape[1]
-    U0 = np.zeros((model.nbVar, model.nbVar, model.nbStates))
+    U0 = np.zeros((model.nbVar, model.nbVar, model.nbStates),dtype=complex)  ## U0 is complex
     for nb in range(nbIterEM):
         L = np.zeros((model.nbStates, model.x.shape[1]))
         for i in range(model.nbStates):
@@ -79,27 +79,29 @@ def learnGMMmodel(model, u, xIn, xOut, nbSamples, nbIterEM, nbIter, nbData):
 
                 GAMMA2_col = GAMMA2[i:i + 1, :].T
                 model.MuMan[0, i] = np.dot(model.MuMan[0, i] + uTmp[0, :, i], GAMMA2_col)
-                model.MuMan[1:5, i:i+1] = expmap(np.dot(uTmp[1:4, :, i], GAMMA2_col), model.MuMan[1:5, i])
-                model.MuMan[5:9, i:i+1] = expmap(np.dot(uTmp[4:7, :, i], GAMMA2_col), model.MuMan[5:9, i])
-                model.MuMan[9:13, i:i+1] = expmap(np.dot(uTmp[7:10, :, i], GAMMA2_col), model.MuMan[9:13, i])
-                model.MuMan[13:17, i:i+1] = expmap(np.dot(uTmp[10:13, :, i], GAMMA2_col), model.MuMan[13:17, i])
-                model.MuMan[17:21, i:i+1] = expmap(np.dot(uTmp[13:16, :, i], GAMMA2_col), model.MuMan[17:21, i])
-                model.MuMan[21:25, i:i+1] = expmap(np.dot(uTmp[16:19, :, i], GAMMA2_col), model.MuMan[21:25, i])
-                model.MuMan[25:29, i:i+1] = expmap(np.dot(uTmp[19:22, :, i], GAMMA2_col), model.MuMan[25:29, i])
-                model.MuMan[29:33, i:i+1] = expmap(np.dot(uTmp[22:25, :, i], GAMMA2_col), model.MuMan[29:33, i])
-                model.MuMan[33:37, i:i+1] = expmap(np.dot(uTmp[25:28, :, i], GAMMA2_col), model.MuMan[33:37, i])
-                model.MuMan[37:40, i:i+1] = np.dot(model.MuMan[37:40, i:i+1] + uTmp[28:31, :, i], GAMMA2_col)
-                model.MuMan[40:43, i:i+1] = np.dot(model.MuMan[40:43, i:i+1] + uTmp[31:34, :, i], GAMMA2_col)
-                model.MuMan[43:46, i:i+1] = np.dot(model.MuMan[43:46, i:i+1] + uTmp[34:37, :, i], GAMMA2_col)
-                model.MuMan[46:49, i:i+1] = np.dot(model.MuMan[46:49, i:i+1] + uTmp[37:40, :, i], GAMMA2_col)
-                model.MuMan[49:52, i:i+1] = np.dot(model.MuMan[49:52, i:i+1] + uTmp[40:43, :, i], GAMMA2_col)
-                model.MuMan[52:55, i:i+1] = np.dot(model.MuMan[52:55, i:i+1] + uTmp[43:46, :, i], GAMMA2_col)
+                model.MuMan[1:5, i:i + 1] = expmap(np.dot(uTmp[1:4, :, i], GAMMA2_col), model.MuMan[1:5, i])
+                model.MuMan[5:9, i:i + 1] = expmap(np.dot(uTmp[4:7, :, i], GAMMA2_col), model.MuMan[5:9, i])
+                model.MuMan[9:13, i:i + 1] = expmap(np.dot(uTmp[7:10, :, i], GAMMA2_col), model.MuMan[9:13, i])
+                model.MuMan[13:17, i:i + 1] = expmap(np.dot(uTmp[10:13, :, i], GAMMA2_col), model.MuMan[13:17, i])
+                model.MuMan[17:21, i:i + 1] = expmap(np.dot(uTmp[13:16, :, i], GAMMA2_col), model.MuMan[17:21, i])
+                model.MuMan[21:25, i:i + 1] = expmap(np.dot(uTmp[16:19, :, i], GAMMA2_col), model.MuMan[21:25, i])
+                model.MuMan[25:29, i:i + 1] = expmap(np.dot(uTmp[19:22, :, i], GAMMA2_col), model.MuMan[25:29, i])
+                model.MuMan[29:33, i:i + 1] = expmap(np.dot(uTmp[22:25, :, i], GAMMA2_col), model.MuMan[29:33, i])
+                model.MuMan[33:37, i:i + 1] = expmap(np.dot(uTmp[25:28, :, i], GAMMA2_col), model.MuMan[33:37, i])
+                model.MuMan[37:40, i:i + 1] = np.dot(model.MuMan[37:40, i:i + 1] + uTmp[28:31, :, i], GAMMA2_col)
+                model.MuMan[40:43, i:i + 1] = np.dot(model.MuMan[40:43, i:i + 1] + uTmp[31:34, :, i], GAMMA2_col)
+                model.MuMan[43:46, i:i + 1] = np.dot(model.MuMan[43:46, i:i + 1] + uTmp[34:37, :, i], GAMMA2_col)
+                model.MuMan[46:49, i:i + 1] = np.dot(model.MuMan[46:49, i:i + 1] + uTmp[37:40, :, i], GAMMA2_col)
+                model.MuMan[49:52, i:i + 1] = np.dot(model.MuMan[49:52, i:i + 1] + uTmp[40:43, :, i], GAMMA2_col)
+                model.MuMan[52:55, i:i + 1] = np.dot(model.MuMan[52:55, i:i + 1] + uTmp[43:46, :, i], GAMMA2_col)
             # Update Sigma
-            model.Sigma[:,:,i] = uTmp[:,:,i].dot(np.diag(GAMMA2[i,:])).dot(uTmp[:,:,i].T) + np.identity(u.shape[0]) * model.params_diagRegFact
+            model.Sigma[:, :, i] = uTmp[:, :, i].dot(np.diag(GAMMA2[i, :])).dot(uTmp[:, :, i].T) + np.identity(
+                u.shape[0]) * model.params_diagRegFact
 
     # Eigendecomposition of Sigma
     for i in range(model.nbStates):
-        W, V = np.linalg.eig(model.Sigma[:,:,i])  ##np.linalg.eig doesn't return exactly the same result as eig() in matlab
-        D = np.diag(W)
-        U0[:,:,i] = np.dot(V,D**0.5)
+        W, V = np.linalg.eig(model.Sigma[:, :, i]) ##np.linalg.eig doesn't return exactly the same result as eig() in matlab
+        D_sqrt = np.diag(np.sqrt(W))
+        U0[:, :, i] = np.dot(V, D_sqrt)
     model.U0 = U0
+    pass

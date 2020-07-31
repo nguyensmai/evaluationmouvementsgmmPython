@@ -1,5 +1,3 @@
-import math
-import numpy as np
 from functions.basic_functions import *
 
 
@@ -32,6 +30,5 @@ def expfct(u):
     Exp = np.array([np.cos(normv), u[0, :] * np.sin(normv) / normv, u[1, :] * np.sin(normv) / normv,
                     u[2, :] * np.sin(normv) / normv])
     ind = np.where(normv < 1e-16)[0]
-    for i in ind.astype(int):
-        Exp[:, ind] = np.array([[1], [0], [0], [0]])
+    Exp[:, ind] = np.array([[1], [0], [0], [0]])
     return Exp

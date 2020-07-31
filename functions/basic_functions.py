@@ -1,4 +1,3 @@
-import math
 import numpy as np
 
 
@@ -17,3 +16,11 @@ def QuatMatrix(q):
                          [q[1], q[0], -q[3], q[2]],
                          [q[2], q[3], q[0], -q[1]],
                          [q[3], -q[2], q[1], q[0]]])
+
+def round(x):
+    '''
+    :param x: must be a positive array
+    '''
+    ##TODO ： if x not positive, raise error
+    xlfoor = np.floor(x)
+    return np.where(x - xlfoor < 0.5, xlfoor, xlfoor + 1)

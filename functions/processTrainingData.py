@@ -1,11 +1,6 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-from functions.mapping import logmap
-from functions.loadData import *
+from functions.loadData import loadData
 from functions.segmentSequence import *
-from functions.temporalAlignment import *
-import time
+from functions.temporalAlignment import temporalAlignment
 
 
 def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est, rem, ws, nbData):
@@ -18,7 +13,7 @@ def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est,
 
     for i in range(1, nspp+1):
         fname = 'SkeletonSequence' + str(i) + '.txt'
-        dataTrain = loadData(trainName, fname, filt, est, rem, ws, nbData)[2]  ##1.5 second
+        dataTrain = loadData(trainName, fname, filt, est, rem, ws, nbData)[2]  ##0.7 second
         out = dataTrain['lElbow ori']
         out = np.vstack((out, dataTrain['lWrist ori']))
         out = np.vstack((out, dataTrain['lShoulder ori']))
@@ -34,7 +29,7 @@ def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est,
             if uIn.size == 0:
                 uRef = dataTrain
             else:
-                dataTrain = temporalAlignment(uRef, dataTrain, fastDP)   ## optimisized :1s
+                dataTrain = temporalAlignment(uRef, dataTrain, fastDP, nbData)[0]  ## optimisized :1s
         uIn = np.hstack((uIn, np.array(range(1, nbData + 1)) * model.dt))
         i = 1
         for d in dataTrain:

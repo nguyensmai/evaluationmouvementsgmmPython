@@ -1,5 +1,4 @@
 import numpy as np
-import math
 
 
 def estimateOrientationFromPosition(posMat):
@@ -69,18 +68,18 @@ def estimateOrientationFromPosition(posMat):
         else:
             oriVec = np.array([oriVec])
             oriMat = np.hstack((oriMat, oriVec.T))
-    oriMat = np.array([[0 if np.isnan(b) else b for b in a] for a in oriMat])
+    oriMat = np.where(np.isnan(oriMat), 0 ,oriMat)
     return oriMat.T
 
 
 def compute_q_from_dirbase(dir, base):  ##return 1-dimension vector
-    normD = math.sqrt(dir[0] ** 2 + dir[1] ** 2 + dir[2] ** 2)
+    normD = np.linalg.norm(dir)
     dir = dir / normD
     a = np.cross(dir, base)
     w = np.dot(dir, base)
     q = np.array([w, a[0], a[1], a[2]])
-    normq = math.sqrt(q[0] ** 2 + q[1] ** 2 + q[2] ** 2 + q[3] ** 2)
+    normq = np.linalg.norm(q)
     q[0] = q[0] + normq
-    normq = math.sqrt(q[0] ** 2 + q[1] ** 2 + q[2] ** 2 + q[3] ** 2)
+    normq = np.linalg.norm(q)
     q = q / normq
     return q
