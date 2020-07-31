@@ -10,7 +10,7 @@ import pickle
 ## Parameters
 nbData = 300  # Number of datapoints
 seuil = -200  # Threshold used for computing score in percentage. The more close it is to zero, the more strict is the evaluation
-minseuil = -500 # default values
+minseuil = -500  # default values
 registration = 1  # temporal alignment or not
 filt = 1  # filtering of data or not
 est = 1  # estimation of orientation from position or kinect quaternions
@@ -20,10 +20,10 @@ fastDP = 1  # fast temporal alignment (using windows instead of full sequence) o
 
 # x1 = np.array([0, -0.5, 3, 4])
 #
-x2 = np.array([6, 3, -1, 8])
+x2 = np.array([6, 3, -1, 8, 2, 5, 1])
 # x3 = np.array([9, 8, 4, 0])
 # m1 = np.array([[1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0], [-1, -9, 0, 6]])
-m2 = np.array([[1, 2, 3], [3, 1, 2], [2, 3, 1]])
+m2 = np.array([[1, 2, 3], [3, 1, 2], [2, 3, 1], [4, 5, 6], [7, 8, 9], [2, 1, 7], [23, 4, 7]])
 
 
 
@@ -52,13 +52,14 @@ posMatTestLong.append(posMatTest_)
 ## Evaluate sequence
 for rep in range(len(dataTest)):
     if registration == 1:
-        dataTestAligned, r, allPoses, poses, motion, distFI = temporalAlignmentEval(model, dataTrain,dataTest[rep],fastDP, nbData)
+        dataTestAligned, r, allPoses, poses, motion, distFI = temporalAlignmentEval(model.cuts, dataTrain,dataTest[rep], fastDP, nbData)
         posMatTest = posMatTestLong[rep][:,r]
     else:
         dataTestAligned = dataTest[rep]
 
     # compute likelihoods
-    Lglobal, Lbodypart, Ljoints = computeLikelihoods(model, dataTestAligned)
+    Lglobal, Lbodypart, Ljoints = computeLikelihoods(model.dt, model.nbStates, model.nbVar, model.Priors, model.Mu, model.Sigma, model.MuMan, dataTestAligned, nbData)
+    # It will be clearer to give model as a parameter, but it will be slower
 
     #get scores
     seuils = np.ones(6)*seuil
