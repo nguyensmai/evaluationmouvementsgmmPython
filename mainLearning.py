@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-from threading import Thread
 from Model import Model
-from functions.processTrainingData import *
+from functions.processTrainingData import processTrainingData
 from functions.learnGMMmodel import learnGMMmodel
 import pickle
 import numpy as np
+import time
+
 
 ## Parameters
 nbData = 300  # Number of datapoints
@@ -26,15 +27,18 @@ ws = 21  # windows size for segmentation
 fastDP = 1  # fast temporal alignment (using windows instead of full sequence) or not
 
 model = Model(nbVar, nbVarMan, nbStates, dt, params_diagRegFact)
-xIn, uIn, xOut, uOut = processTrainingData(model,trainName,nspp,registration,fastDP,filt,est,rem,ws,nbData)
+xIn, uIn, xOut, uOut = processTrainingData(model, trainName, nspp, registration, fastDP, filt, est, rem, ws, nbData)
 u = uIn
 x = xIn
-for i in range(1,16):
+for i in range(1, 16):
     u = np.vstack((u, uOut[i]))
     x = np.vstack((x, xOut[i]))
 model.x = x
-model = learnGMMmodel(model,u,xIn,xOut,nbSamples,nbIterEM,nbIter,nbData)  ## execution time : 3s
+learnGMMmodel(model, u, xIn, xOut, nbSamples, nbIterEM, nbIter, nbData)  ## execution time : 3s
 
-article = open('model.txt', 'wb')
-pickle.dump(model, article)
-article.close()
+f = open('model.txt', 'wb')
+pickle.dump(model, f)
+f.close()
+
+temps = time.perf_counter()
+print('Execution time : ',time.perf_counter(),'s')
