@@ -28,4 +28,3 @@ def init_GMM_kbins(Data, model, nbSamples):
         model.Mu[:, i:i + 1] = np.mean(Data[:, id], axis=1, keepdims=True)
         model.Sigma[:, :, i] = np.cov(Data[:, id]) + np.identity(Data.shape[0]) * model.params_diagRegFact
     model.Priors = model.Priors / np.sum(model.Priors)
-
