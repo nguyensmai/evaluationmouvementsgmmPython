@@ -48,7 +48,7 @@ def learnGMMmodel(model, u, xIn, xOut, nbSamples, nbIterEM, nbIter, nbData):
             Data_gaussPDF[40:43, :] = xOut[14] - model.MuMan[49:52, i:i + 1]
             Data_gaussPDF[43:46, :] = xOut[15] - model.MuMan[52:55, i:i + 1]
 
-            L[i:i + 1, :] = model.Priors[i] * gaussPDF(Data_gaussPDF, model.Mu[:, i:i + 1], model.Sigma[:, :, i]).T
+            L[i, :] = model.Priors[i] * gaussPDF(Data_gaussPDF, model.Mu[:, i], model.Sigma[:, :, i])
 
         GAMMA = L / (np.sum(L, axis=0, keepdims=True) + np.finfo(float).tiny)
         GAMMA2 = GAMMA / np.sum(GAMMA, axis=1, keepdims=True)

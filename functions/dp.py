@@ -19,9 +19,9 @@ def dp(M):
     phi = np.zeros((r, c))
     for i in range(r):
         for j in range(c):
-            dmax = min([D[i, j], D[i, j + 1], D[i + 1, j]])
-            tb = np.argmin([D[i, j], D[i, j + 1], D[i + 1, j]])
-            D[i + 1, j + 1] += dmax
+            triple = np.array([D[i, j], D[i, j + 1], D[i + 1, j]])
+            tb = np.argmin(triple)
+            D[i + 1, j + 1] += triple[tb]
             phi[i, j] = tb+1
 
     # Traceback from top left

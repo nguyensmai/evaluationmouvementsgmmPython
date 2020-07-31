@@ -25,12 +25,12 @@ def loadData(dir, fname, filt, est, rem, ws, resampleSize):
     # Filtering
     if filt == 1:
         b, a = scipy.signal.butter(3, 0.05)
-        posMat = scipy.signal.lfilter(b, a, posMat, axis=0)  ###verified
+        posMat = scipy.signal.lfilter(b, a, posMat, axis=0)
         oriMat = scipy.signal.filtfilt(b, a, oriMat, axis=0)
 
     # Estimation
     if est == 1:
-        oriMat = estimateOrientationFromPosition(posMat)  ##verified
+        oriMat = estimateOrientationFromPosition(posMat)
 
     # data structure : dictionnary
     data = {'lElbow ori': oriMat[:, 20:24].T,
@@ -52,7 +52,6 @@ def loadData(dir, fname, filt, est, rem, ws, resampleSize):
     oriMat = oriMat.T
     posMat = posMat.T
 
-    # removing start : verified
     if rem == 1:
         _in = data['lElbow ori']
         _in = np.vstack((_in, data['lWrist ori']))
@@ -67,7 +66,6 @@ def loadData(dir, fname, filt, est, rem, ws, resampleSize):
         for item in data:
             data[item] = data[item][:, deb - 1:]
 
-    # resampling : verified
     for item in data:
         length = data[item].shape[1]
         new_x = np.linspace(1, length, resampleSize)

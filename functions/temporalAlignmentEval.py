@@ -3,10 +3,10 @@ from functions.dp import *
 from functions.basic_functions import round
 
 
-def temporalAlignmentEval(model, trainD, testD, fast, sizeData):
+def temporalAlignmentEval(m_cuts, trainD, testD, fast, sizeData):
     keypose = 0
     prevDist = 5
-    poseTracking = np.zeros(model.cuts.size)
+    poseTracking = np.zeros(m_cuts.size)
     motionStarted = 0
     performedEntirely = 0
     if fast == 1:
@@ -38,7 +38,7 @@ def temporalAlignmentEval(model, trainD, testD, fast, sizeData):
                 DM[i][j] = 0
 
     ## keyposeTracking
-    i = model.cuts[keypose]
+    i = m_cuts[keypose]
     Line = logmap(testD['lElbow ori'][:, col], trainD['lElbow ori'][:, i:i + 1])
     Line = np.vstack((Line, logmap(testD['lWrist ori'][:, col], trainD['lWrist ori'][:, i:i + 1])))
     Line = np.vstack((Line, logmap(testD['lShoulder ori'][:, col], trainD['lShoulder ori'][:, i:i + 1])))
@@ -51,10 +51,10 @@ def temporalAlignmentEval(model, trainD, testD, fast, sizeData):
             if prevDist < 1.7 and dist[n] > prevDist:
                 poseTracking[keypose] = 1
                 keypose += 1
-                if keypose == model.cuts.size:
+                if keypose == m_cuts.size:
                     performedEntirely = 1
                 else:
-                    i = model.cuts[keypose]
+                    i = m_cuts[keypose]
                     Line = logmap(testD['lElbow ori'][:, col], trainD['lElbow ori'][:, i:i + 1])
                     Line = np.vstack((Line, logmap(testD['lWrist ori'][:, col], trainD['lWrist ori'][:, i:i + 1])))
                     Line = np.vstack(
@@ -66,7 +66,7 @@ def temporalAlignmentEval(model, trainD, testD, fast, sizeData):
                     dist = np.linalg.norm(Line, axis=0)
             prevDist = dist[n]
     # in Matlab, col==size(testD{1}.data,2 and poseTracking(keypose)==0 useless
-    if keypose == model.cuts.size - 1 and prevDist < 1.4:
+    if keypose == m_cuts.size - 1 and prevDist < 1.4:
         poseTracking[keypose] = 1
         performedEntirely = 1
 
