@@ -4,15 +4,15 @@ from functions.temporalAlignment import temporalAlignment
 
 
 def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est, rem, ws, nbData):
-    uIn = np.array([])
+    xIn = np.array([])
     uOut = {}
     uRef = {}
     xOut = {}
     for i in range(1, 16):  # this dictionary starts with 1 and ends with 15
         uOut[i] = np.array([])
 
-    for i in range(1, nspp+1):
-        fname = 'SkeletonSequence' + str(i) + '.txt'
+    for i in range(nspp):
+        fname = 'SkeletonSequence' + str(i + 1) + '.txt'
         dataTrain = loadData(trainName, fname, filt, est, rem, ws, nbData)[2]  ##0.7 second
         out = dataTrain['lElbow ori']
         out = np.vstack((out, dataTrain['lWrist ori']))
@@ -22,27 +22,27 @@ def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est,
         out = np.vstack((out, dataTrain['rShoulder ori']))
         cuts, variation = segmentSequence(out, ws, 0.05)  # optimized: 0.2s
         cutsKP = segmentSequenceKeyPose(out, ws, 0.02)[0]  # optimized: 0.2s
-        if uIn.size == 0:
+        if i == 0:
             model.cuts = cuts
             model.cutsKP = cutsKP
         if registration == 1:
-            if uIn.size == 0:
+            if i == 0:
                 uRef = dataTrain
             else:
                 dataTrain = temporalAlignment(uRef, dataTrain, fastDP, nbData)[0]  ## optimisized :1s
-        uIn = np.hstack((uIn, np.array(range(1, nbData + 1)) * model.dt))
-        i = 1
+        xIn = np.hstack((xIn, np.array(range(1, nbData + 1)) * model.dt))
+        k = 1
         for d in dataTrain:
-            if uOut[i].size == 0:
-                uOut[i] = dataTrain[d]
+            if i == 0:
+                xOut[k] = dataTrain[d]
             else:
-                uOut[i] = np.hstack((uOut[i], dataTrain[d]))
-            i += 1
-    xIn = uIn
+                xOut[k] = np.hstack((xOut[k], dataTrain[d]))
+            k += 1
+    uIn = xIn  ## x, u structure optimised
     std = np.array([[0], [1], [0], [0]])
-    for i in range(1, 16):
-        xOut[i] = uOut[i]
-        if i < 10:
-            uOut[i] = np.array([logmap(uOut[i][:, t:t + 1], std) for t in range(nbData * nspp)]).T[0]
-        i += 1
+    for k in range(1, 16):
+        if k < 10:
+            uOut[k] = logmap(xOut[k], std)
+        else:
+            uOut[k] = xOut[k]
     return xIn, uIn, xOut, uOut
