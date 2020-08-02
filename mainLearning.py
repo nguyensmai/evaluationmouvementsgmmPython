@@ -27,17 +27,17 @@ ws = 21  # windows size for segmentation
 fastDP = 1  # fast temporal alignment (using windows instead of full sequence) or not
 
 model = Model(nbVar, nbVarMan, nbStates, dt, params_diagRegFact)
-xIn, uIn, xOut, uOut = processTrainingData(model, trainName, nspp, registration, fastDP, filt, est, rem, ws, nbData) ##2s
+xIn, uIn, xOut, uOut = processTrainingData(model, trainName, nspp, registration, fastDP, filt, est, rem, ws, nbData) ##1.6s
 u = uIn
 x = xIn
 for i in range(1, 16):
     u = np.vstack((u, uOut[i]))
     x = np.vstack((x, xOut[i]))
 model.x = x
-learnGMMmodel(model, u, xIn, xOut, nbSamples, nbIterEM, nbIter, nbData)  ## execution time : 2.5s
+learnGMMmodel(model, u, xIn, xOut, nbSamples, nbIterEM, nbIter, nbData)  ## execution time : 2.3s
 
 f = open('model.txt', 'wb')
 pickle.dump(model, f)
 f.close()
 
-print('Execution time : ',time.perf_counter(),'s')
+print('Execution time : ',time.perf_counter(),'s') # 4.4s
