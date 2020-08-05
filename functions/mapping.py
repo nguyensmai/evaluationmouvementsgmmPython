@@ -10,15 +10,13 @@ def logmap(x, mu):
         Q = np.identity(4)
     else:
         Q = QuatMatrix(mu)
-    u = logfct(np.dot(Q.T, x))
-    return u
+    return logfct(np.dot(Q.T, x))
 
 
 def logfct(x):
     scale = acoslog(x[0, :]) / np.sqrt(1 - x[0, :] ** 2)
     scale = np.where(np.isnan(scale), 1, scale)
-    Log = np.array([x[1, :] * scale, x[2, :] * scale, x[3, :] * scale])
-    return Log
+    return x[1:, :] * scale
 
 
 def expmap(u, mu):
@@ -26,7 +24,7 @@ def expmap(u, mu):
 
 
 def expfct(u):
-    normv = np.sqrt(u[0, :] ** 2 + u[1, :] ** 2 + u[2, :] ** 2)
+    normv = np.linalg.norm(u, axis=0)
     Exp = np.array([np.cos(normv), u[0, :] * np.sin(normv) / normv, u[1, :] * np.sin(normv) / normv,
                     u[2, :] * np.sin(normv) / normv])
     ind = np.where(normv < 1e-16)[0]

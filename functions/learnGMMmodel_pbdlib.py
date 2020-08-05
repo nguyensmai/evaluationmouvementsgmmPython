@@ -4,7 +4,8 @@ from m_fcts.gaussPDF import gaussPDF
 from functions.mapping import logmap, expmap
 
 
-def learnGMMmodel(model, u, xIn, xOut, nbSamples, nbIterEM, nbIter, nbData):
+def learnGMMmodel_pbdlib(model, u, xIn, xOut, nbSamples, nbIterEM, nbIter, nbData):
+
     init_GMM_kbins(u, model, nbSamples)
     # MuMan
     mu_exp = np.array([[0], [1], [0], [0]])

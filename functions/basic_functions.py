@@ -5,8 +5,7 @@ def acoslog(x):
     '''
     Arcosine re-defitinion to make sure the distance between antipodal quaternions is zero (2.50 from Dubbelman's Thesis)
     '''
-    x = np.where(x >= 1, 1, x)
-    x = np.where(x <= -1, -1, x)
+    x = np.maximum(np.minimum(x, 1), -1)
     return np.where(x < 0, np.arccos(x) - np.pi, np.arccos(x))
 
 

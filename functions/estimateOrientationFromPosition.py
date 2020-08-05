@@ -68,7 +68,7 @@ def estimateOrientationFromPosition(posMat):
         else:
             oriVec = np.array([oriVec])
             oriMat = np.hstack((oriMat, oriVec.T))
-    oriMat = np.where(np.isnan(oriMat), 0 ,oriMat)
+    oriMat = np.where(np.isnan(oriMat), 0, oriMat)
     return oriMat.T
 
 

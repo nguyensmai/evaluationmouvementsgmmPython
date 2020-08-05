@@ -1,4 +1,4 @@
-import math
+import math #TODO: remove math
 import numpy as np
 from functions.mapping import logmap
 from functions.peakdet import peakdet

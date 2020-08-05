@@ -63,9 +63,9 @@ def computeLikelihoods(m_dt, m_nbStates, m_nbVar, m_Priors, m_Mu, m_Sigma, m_MuM
         sigma[1:, 0] = m_Sigma[28:46, 0, i]
         sigma[1:, 1:] = m_Sigma[28:46, 28:46, i]
         L[i, :] = m_Priors[i] * gaussPDF(Data_gaussPDF[index, :, i], mu, sigma)
-        LL = np.log(np.sum(L, axis=0))
-        LL = np.where(LL < -2000, -2000, LL)
-        score = np.mean(LL)
-        Lglobal['Positions'] = Lnode(LL, score)
+    LL = np.log(np.sum(L, axis=0))
+    LL = np.where(LL < -2000, -2000, LL)
+    score = np.mean(LL)
+    Lglobal['Positions'] = Lnode(LL, score)
 
     return [], [], []
