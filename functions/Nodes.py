@@ -5,7 +5,7 @@ class Lnode:
 
 
 class Snode:
-    def __init__(self):
-        global_ = None
-        perSegment = None
-        perSegmentKP = None
+    def __init__(self, glabal_, perSegment, perSegmentKP):
+        self.global_ = glabal_
+        self.perSegment = perSegment
+        self.perSegmentKP = perSegmentKP

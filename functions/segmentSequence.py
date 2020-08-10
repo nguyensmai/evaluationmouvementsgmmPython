@@ -25,7 +25,7 @@ def segmentSequenceKeyPose(_in, ws, thres):
             if variation[0][t] < thres:
                 mintab = np.hstack((mintab, t + 1))
                 kp = 1
-    cuts = (mintab - 1).astype(int) # in Python, indice begins with 0 while in Matalb with 1
+    cuts = mintab.astype(int) # in Python, indice begins with 0 while in Matalb with 1
     return cuts, variation
 
 
@@ -41,7 +41,7 @@ def segmentSequence(_in, ws, thres):  ##return 1-d vecteur and matrix
         variation[0][t - 1] = sigma
     mintab = peakdet(variation, thres)[1]
     if mintab.shape[1] > 0:
-        cuts = mintab[:, 0] - 1  # in Python, indice begins with 0 while in Matalb with 1
+        cuts = mintab[:, 0]  # in Python, indice begins with 0 while in Matalb with 1
     else:
         cuts = np.array([])
     return cuts.astype(int), variation

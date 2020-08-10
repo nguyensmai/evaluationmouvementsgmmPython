@@ -38,7 +38,7 @@ def temporalAlignmentEval(m_cuts, trainD, testD, fast, sizeData):
                 DM[i][j] = 0
 
     ## keyposeTracking
-    i = m_cuts[keypose]
+    i = m_cuts[keypose]-1
     Line = logmap(testD['lElbow ori'][:, col], trainD['lElbow ori'][:, i:i + 1])
     Line = np.vstack((Line, logmap(testD['lWrist ori'][:, col], trainD['lWrist ori'][:, i:i + 1])))
     Line = np.vstack((Line, logmap(testD['lShoulder ori'][:, col], trainD['lShoulder ori'][:, i:i + 1])))
@@ -54,7 +54,7 @@ def temporalAlignmentEval(m_cuts, trainD, testD, fast, sizeData):
                 if keypose == m_cuts.size:
                     performedEntirely = 1
                 else:
-                    i = m_cuts[keypose]
+                    i = m_cuts[keypose]-1
                     Line = logmap(testD['lElbow ori'][:, col], trainD['lElbow ori'][:, i:i + 1])
                     Line = np.vstack((Line, logmap(testD['lWrist ori'][:, col], trainD['lWrist ori'][:, i:i + 1])))
                     Line = np.vstack(
