@@ -18,18 +18,6 @@ rem = 1  # removal of begining of the sequence (no motion) or not
 ws = 21  # windows size for segmentation
 fastDP = 1  # fast temporal alignment (using windows instead of full sequence) or not
 
-# x1 = np.array([0, -0.5, 3, 4])
-#
-# x2 = np.array([6, 3, -1, np.nan, 2, 5, 1])
-# # x3 = np.array([9, 8, 4, 0])
-# # m1 = np.array([[1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0], [-1, -9, 0, 6]])
-# m2 = np.array([[1, 2, 3], [3, 1, 2], [2, 3, 1], [4, 5, 6], [7, 8, 9], [2, 1, 7], [23, 4, 7]])
-#
-# M1 = np.array([[3,1,2],[2,3,1],[1,2,3]])
-#
-# V,D = np.linalg.eig(M1)
-# print(V)
-# print(D)
 
 # load modelExo3
 f = open('model.txt', 'rb')
@@ -68,6 +56,7 @@ for rep in range(len(dataTest)):
     #get scores
     seuils = np.ones(6)*seuil
     minseuils = np.ones(6)*minseuil
-    computeScores(model, Lglobal, Lbodypart, Ljoints, seuils, minseuils)
+    Sglobal, Sbodypart, Sjoints = computeScores(model.cuts, model.cutsKP, Lglobal, Lbodypart, Ljoints, seuils, minseuils)
+
 
 print(time.perf_counter())

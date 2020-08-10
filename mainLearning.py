@@ -40,4 +40,4 @@ f = open('model.txt', 'wb')
 pickle.dump(model, f)
 f.close()
 
-print('Execution time : ',time.perf_counter(),'s') # 4.4s
+print('Execution time : ',time.perf_counter(),'s')
