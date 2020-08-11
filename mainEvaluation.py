@@ -57,6 +57,27 @@ for rep in range(len(dataTest)):
     seuils = np.ones(6)*seuil
     minseuils = np.ones(6)*minseuil
     Sglobal, Sbodypart, Sjoints = computeScores(model.cuts, model.cutsKP, Lglobal, Lbodypart, Ljoints, seuils, minseuils)
+    
+    
+    print('Sglobal')
+    for i in Sglobal:
+        print(i)
+        Sglobal[i].print()
+        print()
+    print('.................................')
+    print('Sbodypart')
+    for i in Sbodypart:
+        for j in Sbodypart[i]:
+            print(j)
+            Sbodypart[i][j].print()
+            print()
+    print('.................................')
+    print('Sjoints')
+    for i in Sjoints:
+        for j in Sjoints[i]:
+            print(j)
+            Sjoints[i][j].print()
+            print()
 
 
 print(time.perf_counter())
