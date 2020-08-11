@@ -9,3 +9,8 @@ class Snode:
         self.global_ = glabal_
         self.perSegment = perSegment
         self.perSegmentKP = perSegmentKP
+            
+    def print(self):
+        print('global : ',self.global_)
+        print('perSegment : ', self.perSegment)
+        print('perSegmentKP : ', self.perSegmentKP)
