@@ -11,7 +11,6 @@ import time
 nbData = 300  # Number of datapoints
 nbSamples = 2  # Number of demonstrations
 trainName = 'data/Assis3Maxime/'  # folders names from where to load data
-nspp = 2  # number of skeleton sequence per folder
 nbVar = 46  # Dimension of the tangent space (incl. time)
 nbVarMan = 55  # Dimension of the manifold (incl. time)
 nbIter = 10  # Number of iteration for the Gauss Newton algorithm
@@ -27,7 +26,7 @@ ws = 21  # windows size for segmentation
 fastDP = 1  # fast temporal alignment (using windows instead of full sequence) or not
 
 model = Model(nbVar, nbVarMan, nbStates, dt, params_diagRegFact)
-xIn, uIn, xOut, uOut = processTrainingData(model, trainName, nspp, registration, fastDP, filt, est, rem, ws, nbData) ##1.6s
+xIn, uIn, xOut, uOut = processTrainingData(model, trainName, nbSamples, registration, fastDP, filt, est, rem, ws, nbData) ##1.6s
 u = uIn
 x = xIn
 for i in range(1, 16):
