@@ -3,7 +3,7 @@ from functions.segmentSequence import *
 from functions.temporalAlignment import temporalAlignment
 
 
-def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est, rem, ws, nbData):
+def processTrainingData(model, trainName, nbSamples, registration, fastDP, filt, est, rem, ws, nbData):
     xIn = np.array([])
     uOut = {}
     uRef = {}
@@ -11,7 +11,7 @@ def processTrainingData(model, trainName, nspp, registration, fastDP, filt, est,
     for i in range(1, 16):  # this dictionary starts with 1 and ends with 15
         uOut[i] = np.array([])
 
-    for i in range(nspp):
+    for i in range(nbSamples):
         fname = 'SkeletonSequence' + str(i + 1) + '.txt'
         dataTrain = loadData(trainName, fname, filt, est, rem, ws, nbData)[2]  ##0.7 second
         out = dataTrain['lElbow ori']

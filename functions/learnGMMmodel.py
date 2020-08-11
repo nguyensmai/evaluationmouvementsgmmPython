@@ -8,7 +8,7 @@ def learnGMMmodel(model, u, xIn, xOut, nbSamples, nbIterEM, nbIter, nbData):
     init_GMM_kbins(u, model, nbSamples)
     # MuMan
     mu_exp = np.array([[0], [1], [0], [0]])
-    model.MuMan = np.zeros((55, model.nbStates))  ### if we change the number of Variables, 55 needs to be modified
+    model.MuMan = np.zeros((model.nbVarMan, model.nbStates))
     model.MuMan[0, :] = model.Mu[0, :]
     model.MuMan[1:5, :] = expmap(model.Mu[1:4], mu_exp)
     model.MuMan[5:9, :] = expmap(model.Mu[4:7], mu_exp)

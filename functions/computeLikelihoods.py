@@ -115,7 +115,7 @@ def computeLikelihoods(m_dt, m_nbStates, m_nbVar, m_Priors, m_Mu, m_Sigma, m_MuM
     LL = np.log(np.sum(L, axis=0))
     LL = np.where(LL < -2000, -2000, LL)
     score = np.mean(LL)
-    left_arm['Left Arm Postion'] = Lnode(LL, score)
+    left_arm['Left Arm Position'] = Lnode(LL, score)
 
     # Right Arm Orientation
     index = [0, 10, 11, 12, 13, 14, 15, 16, 17, 18]
