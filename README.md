@@ -3,10 +3,10 @@ This is a Python3 version of 'EvaluationMouventsgmm'. The purpose is to allow th
 
 To start the program, use the commands below. 
 
-'''
+```
 python mainLearning.py
 python mainEvaluation.py
-'''
+```
 
 
 
