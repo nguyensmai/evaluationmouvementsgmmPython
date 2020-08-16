@@ -17,7 +17,7 @@ est = 1  # estimation of orientation from position or kinect quaternions
 rem = 1  # removal of begining of the sequence (no motion) or not
 ws = 21  # windows size for segmentation
 fastDP = 1  # fast temporal alignment (using windows instead of full sequence) or not
-
+PrintResults = 1  # print the results or not
 
 # load modelExo3
 f = open('model.txt', 'rb')
@@ -44,40 +44,42 @@ posMatTestLong.append(posMatTest_)
 ## Evaluate sequence
 for rep in range(len(dataTest)):
     if registration == 1:
-        dataTestAligned, r, allPoses, poses, motion, distFI = temporalAlignmentEval(model.cuts, dataTrain,dataTest[rep], fastDP, nbData)
-        posMatTest = posMatTestLong[rep][:,r]
+        dataTestAligned, r, allPoses, poses, motion, distFI = temporalAlignmentEval(model.cuts, dataTrain,
+                                                                                    dataTest[rep], fastDP, nbData)
+        posMatTest = posMatTestLong[rep][:, r]
     else:
         dataTestAligned = dataTest[rep]
 
     # compute likelihoods
-    Lglobal, Lbodypart, Ljoints = computeLikelihoods(model.dt, model.nbStates, model.nbVar, model.Priors, model.Mu, model.Sigma, model.MuMan, dataTestAligned, nbData)
+    Lglobal, Lbodypart, Ljoints = computeLikelihoods(model.dt, model.nbStates, model.nbVar, model.Priors, model.Mu,
+                                                     model.Sigma, model.MuMan, dataTestAligned, nbData)
     # It will be clearer to give model as a parameter, but it will be slower
 
-    #get scores
-    seuils = np.ones(6)*seuil
-    minseuils = np.ones(6)*minseuil
-    Sglobal, Sbodypart, Sjoints = computeScores(model.cuts, model.cutsKP, Lglobal, Lbodypart, Ljoints, seuils, minseuils)
-    
-    
-    print('Sglobal')
-    for i in Sglobal:
-        print(i)
-        Sglobal[i].print()
-        print()
-    print('.................................')
-    print('Sbodypart')
-    for i in Sbodypart:
-        for j in Sbodypart[i]:
-            print(j)
-            Sbodypart[i][j].print()
-            print()
-    print('.................................')
-    print('Sjoints')
-    for i in Sjoints:
-        for j in Sjoints[i]:
-            print(j)
-            Sjoints[i][j].print()
-            print()
+    # get scores
+    seuils = np.ones(6) * seuil
+    minseuils = np.ones(6) * minseuil
+    Sglobal, Sbodypart, Sjoints = computeScores(model.cuts, model.cutsKP, Lglobal, Lbodypart, Ljoints, seuils,
+                                                minseuils)
 
+    if PrintResults:
+        print('Sglobal')
+        for i in Sglobal:
+            print(i)
+            Sglobal[i].print()
+            print()
+        print('.................................')
+        print('Sbodypart')
+        for i in Sbodypart:
+            for j in Sbodypart[i]:
+                print(j)
+                Sbodypart[i][j].print()
+                print()
+        print('.................................')
+        print('Sjoints')
+        for i in Sjoints:
+            for j in Sjoints[i]:
+                print(j)
+                Sjoints[i][j].print()
+                print()
 
-print(time.perf_counter())
+print('Execution time : ', time.perf_counter(), 's')
